@@ -1,57 +1,51 @@
 package view;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
+
+import controller.Controller;
+import view.frame.Frame;
+import view.frame.MenuItem;
+import view.panel.PanelMain;
+import view.subpanel.table.SubPanelTable;
 
 public class Window {
 
-	private JFrame frame;
-
+	private Frame frame;
+	private PanelMain panelMain;
+	private SubPanelTable subPanelTable; 
+	
 	public Window() {
 		initialize();
 	}
 
+	public JMenuItem getMenuItem(MenuItem menuItem) {
+		return frame.menuItemList().get(menuItem.index());
+	}
+	
+	public void addController(Controller controller) {
+		frame.menuItemList().forEach(menuItem -> menuItem.addActionListener(controller));
+		frame.addKeyListener(controller);
+	}
+	
+	public SubPanelTable game() {
+		return subPanelTable;
+	}
+	
 	public void show() {
 		frame.setVisible(true);
 	}
 	
+	public void close() {
+		frame.dispose();
+	}
+	
 	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("Pong");
-		frame.setBounds(100, 100, 574, 364);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame = new Frame();
 		
-		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
-		
-		JMenu menu = new JMenu("Menu");
-		menuBar.add(menu);
-		
-		JMenuItem menuItemNewGame = new JMenuItem("Novo Jogo");
-		menu.add(menuItemNewGame);
-		
-		JMenuItem menuItemExit = new JMenuItem("Sair");
-		menu.add(menuItemExit);
-		
-		JMenu menuHelp = new JMenu("Ajuda");
-		menuBar.add(menuHelp);
-		
-		JMenuItem menuItemAbout = new JMenuItem("Sobre");
-		menuHelp.add(menuItemAbout);
-		frame.getContentPane().setLayout(null);
-		
-		JPanel panelMain = new JPanel();
-		panelMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelMain.setBounds(10, 10, 532, 276);
+		panelMain = new PanelMain();
 		frame.getContentPane().add(panelMain);
-		panelMain.setLayout(null);
 		
-		JPanel panelTable = new JPanel();
-		panelTable.setBounds(10, 10, 512, 256);
-		panelMain.add(panelTable);
+		subPanelTable = new SubPanelTable();
+		panelMain.add(subPanelTable);
 	}
 }
