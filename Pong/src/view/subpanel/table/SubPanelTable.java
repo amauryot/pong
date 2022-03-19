@@ -14,10 +14,6 @@ public class SubPanelTable extends JPanel {
 	private final int TABLE_Y      = 10;
 	private final int TABLE_WIDTH  = 512;
 	private final int TABLE_HEIGHT = 256;
-	private final int TABLE_TOP    = 0;
-	private final int TABLE_BOTTOM = TABLE_HEIGHT;
-	private final int TABLE_LEFT   = 0;
-	private final int TABLE_RIGHT  = TABLE_WIDTH;
 	
 	private final int BALL_WIDTH  = 12;
 	private final int BALL_HEIGHT = 12;
@@ -102,58 +98,58 @@ public class SubPanelTable extends JPanel {
 	}
 	
 	private boolean collidingTopTable() {
-		return (topBall() < TABLE_TOP);
+		return (ballTopEdge() < 0);
 	}
 	
 	private boolean collidingBottomTable() {
-		return (bottomBall() > TABLE_BOTTOM);
+		return (ballBottomEdge() > TABLE_HEIGHT);
 	}
 	
 	private boolean collidingLeftTable() {
-		return (leftBall() < TABLE_LEFT);
+		return (ballLeftEdge() < 0);
 	}
 	
 	private boolean collidingRightTable() {
-		return (rightBall() > TABLE_RIGHT);
+		return (ballRightEdge() > TABLE_WIDTH);
 	}
 	
 	private boolean collidingPaddle1Right() {
-		return (leftBall() < PADDLE_1_RIGHT) && (topBall() < bottomPaddle1()) && (bottomBall() > topPaddle1());
+		return (ballLeftEdge() < PADDLE_1_RIGHT) && (ballTopEdge() < paddle1BottomEdge()) && (ballBottomEdge() > paddle1TopEdge());
 	}
 	
 	private boolean collidingPaddle2Left() {
-		return (rightBall() > PADDLE_2_LEFT) && (topBall() < bottomPaddle2()) && (bottomBall() > topPaddle2());
+		return (ballRightEdge() > PADDLE_2_LEFT) && (ballTopEdge() < paddle2BottomEdge()) && (ballBottomEdge() > paddle2TopEdge());
 	}
 	
-	private int topBall() {
+	private int ballTopEdge() {
 		return yBall;
 	}
 	
-	private int bottomBall() {
+	private int ballBottomEdge() {
 		return yBall + BALL_HEIGHT;
 	}
 	
-	private int leftBall() {
+	private int ballLeftEdge() {
 		return xBall;
 	}
 	
-	private int rightBall() {
+	private int ballRightEdge() {
 		return xBall + BALL_WIDTH;
 	}
 	
-	private int topPaddle1() {
+	private int paddle1TopEdge() {
 		return yPaddle1;
 	}
 	
-	private int bottomPaddle1() {
+	private int paddle1BottomEdge() {
 		return yPaddle1 + PADDLE_HEIGHT;
 	}
 	
-	private int topPaddle2() {
+	private int paddle2TopEdge() {
 		return yPaddle2;
 	}
 	
-	private int bottomPaddle2() {
+	private int paddle2BottomEdge() {
 		return yPaddle2 + PADDLE_HEIGHT;
 	}
 	
@@ -167,6 +163,6 @@ public class SubPanelTable extends JPanel {
 		yVelocity = 2;
 		
 		yPaddle1 = (TABLE_HEIGHT - PADDLE_HEIGHT) / 2;
-		yPaddle2 = (TABLE_HEIGHT - PADDLE_HEIGHT) / 2;
+		yPaddle2 = yPaddle1;
 	}
 }
