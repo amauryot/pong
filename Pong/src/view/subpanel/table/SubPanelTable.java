@@ -18,12 +18,12 @@ public class SubPanelTable extends JPanel {
 	private final int BALL_WIDTH  = 12;
 	private final int BALL_HEIGHT = 12;
 	
-	private final int PADDLE_WIDTH   = 10;
-	private final int PADDLE_HEIGHT  = 50;
-	private final int PADDLE_1_X     = 10;
-	private final int PADDLE_2_X     = TABLE_WIDTH - PADDLE_WIDTH - PADDLE_1_X;
-	private final int PADDLE_1_RIGHT = PADDLE_1_X + PADDLE_WIDTH;
-	private final int PADDLE_2_LEFT  = PADDLE_2_X;
+	private final int PADDLE_WIDTH  = 10;
+	private final int PADDLE_HEIGHT = 50;
+	private final int PADDLE_1_X    = 10;
+	private final int PADDLE_2_X    = TABLE_WIDTH - PADDLE_WIDTH - PADDLE_1_X;
+	private final int PADDLE_1_EDGE = PADDLE_1_X + PADDLE_WIDTH;
+	private final int PADDLE_2_EDGE = PADDLE_2_X;
 	
 	private int xBall, yBall;
 	private int xVelocity, yVelocity;
@@ -68,11 +68,11 @@ public class SubPanelTable extends JPanel {
 	}
 	
 	public void checkCollisions() {
-		if (collidingTopTable() || collidingBottomTable()) {
+		if (collidingTableTopEdge() || collidingTableBottomEdge()) {
 			yVelocity *= -1;
 		}
 		
-		if (collidingLeftTable() || collidingRightTable() || collidingPaddle1Right() || collidingPaddle2Left()) {
+		if (collidingTableLeftEdge() || collidingTableRightEdge() || collidingPaddle1Edge() || collidingPaddle2Edge()) {
 			xVelocity *= -1;
 		}
 	}
@@ -97,28 +97,28 @@ public class SubPanelTable extends JPanel {
 		// TODO
 	}
 	
-	private boolean collidingTopTable() {
+	private boolean collidingTableTopEdge() {
 		return (ballTopEdge() < 0);
 	}
 	
-	private boolean collidingBottomTable() {
+	private boolean collidingTableBottomEdge() {
 		return (ballBottomEdge() > TABLE_HEIGHT);
 	}
 	
-	private boolean collidingLeftTable() {
+	private boolean collidingTableLeftEdge() {
 		return (ballLeftEdge() < 0);
 	}
 	
-	private boolean collidingRightTable() {
+	private boolean collidingTableRightEdge() {
 		return (ballRightEdge() > TABLE_WIDTH);
 	}
 	
-	private boolean collidingPaddle1Right() {
-		return (ballLeftEdge() < PADDLE_1_RIGHT) && (ballTopEdge() < paddle1BottomEdge()) && (ballBottomEdge() > paddle1TopEdge());
+	private boolean collidingPaddle1Edge() {
+		return (ballLeftEdge() < PADDLE_1_EDGE) && (ballTopEdge() < paddle1BottomEdge()) && (ballBottomEdge() > paddle1TopEdge());
 	}
 	
-	private boolean collidingPaddle2Left() {
-		return (ballRightEdge() > PADDLE_2_LEFT) && (ballTopEdge() < paddle2BottomEdge()) && (ballBottomEdge() > paddle2TopEdge());
+	private boolean collidingPaddle2Edge() {
+		return (ballRightEdge() > PADDLE_2_EDGE) && (ballTopEdge() < paddle2BottomEdge()) && (ballBottomEdge() > paddle2TopEdge());
 	}
 	
 	private int ballTopEdge() {
