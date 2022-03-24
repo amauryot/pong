@@ -6,6 +6,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import model.Ball;
+import model.Paddle;
+
 public class SubPanelTable extends JPanel {
 
 	private static final long serialVersionUID = -1918775861653731814L;
@@ -17,21 +20,37 @@ public class SubPanelTable extends JPanel {
 	
 	private final int BALL_WIDTH  = 12;
 	private final int BALL_HEIGHT = 12;
+	private final int BALL_X      = (TABLE_WIDTH - BALL_WIDTH) / 2;
+	private final int BALL_Y      = (TABLE_HEIGHT - BALL_HEIGHT) / 2;
 	
 	private final int PADDLE_WIDTH  = 10;
 	private final int PADDLE_HEIGHT = 50;
-	private final int PADDLE_1_X    = 10;
-	private final int PADDLE_2_X    = TABLE_WIDTH - PADDLE_WIDTH - PADDLE_1_X;
-	private final int PADDLE_1_EDGE = PADDLE_1_X + PADDLE_WIDTH;
-	private final int PADDLE_2_EDGE = PADDLE_2_X;
 	
-	private int xBall, yBall;
-	private int xVelocity, yVelocity;
-	private int yPaddle1, yPaddle2;
+	private final int PADDLE_1_X = 10;
+	private final int PADDLE_1_Y = (TABLE_HEIGHT - PADDLE_HEIGHT) / 2;
+	
+	private final int PADDLE_2_X = TABLE_WIDTH - PADDLE_WIDTH - PADDLE_1_X;
+	private final int PADDLE_2_Y = PADDLE_1_Y;
+	
+	private int xVelocity = 2;
+	private int yVelocity = 2;
+	
+	private Ball ball;
+	private Paddle paddle1;
+	private Paddle paddle2;
 	
 	public SubPanelTable() {
 		super();
 		initialize();
+	}
+	
+	private void initialize() {
+		this.setBounds(TABLE_X, TABLE_Y, TABLE_WIDTH, TABLE_HEIGHT);
+		
+		ball = new Ball(BALL_X, BALL_Y, BALL_WIDTH, BALL_HEIGHT);
+		
+		paddle1 = new Paddle(PADDLE_1_X, PADDLE_1_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		paddle2 = new Paddle(PADDLE_2_X, PADDLE_2_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
 	}
 	
 	@Override
@@ -51,20 +70,20 @@ public class SubPanelTable extends JPanel {
 	}
 	
 	public void moveBall() {
-		xBall += xVelocity;
-		yBall += yVelocity;
+		ball.setPositionX(ball.x() + xVelocity);
+		ball.setPositionY(ball.y() + yVelocity);
 	}
 	
 	public void moveUpPaddle1() {
-		yPaddle1 -= 10;
+		paddle1.setPositionY(paddle1.y() - 10);
 	}
 	
 	public void moveDownPaddle1() {
-		yPaddle1 += 10;
+		paddle1.setPositionY(paddle1.y() + 10);
 	}
 	
 	public void movePaddle2() {
-		yPaddle2 = yBall - ((PADDLE_HEIGHT - BALL_HEIGHT) / 2);
+		paddle2.setPositionY(ball.y());
 	}
 	
 	public void checkCollisions() {
@@ -84,13 +103,13 @@ public class SubPanelTable extends JPanel {
 	
 	private void drawBall(Graphics2D g2d) {
 		g2d.setColor(Color.WHITE);
-		g2d.fillOval(xBall, yBall, BALL_WIDTH, BALL_HEIGHT);
+		g2d.fillOval(ball.x(), ball.y(), BALL_WIDTH, BALL_HEIGHT);
 	}
 	
 	private void drawPaddles(Graphics2D g2d) {
 		g2d.setColor(Color.WHITE);
-		g2d.fillRect(PADDLE_1_X, yPaddle1, PADDLE_WIDTH, PADDLE_HEIGHT);
-		g2d.fillRect(PADDLE_2_X, yPaddle2, PADDLE_WIDTH, PADDLE_HEIGHT);
+		g2d.fillRect(PADDLE_1_X, paddle1.y(), PADDLE_WIDTH, PADDLE_HEIGHT);
+		g2d.fillRect(PADDLE_2_X, paddle2.y(), PADDLE_WIDTH, PADDLE_HEIGHT);
 	}
 	
 	private void drawScore(Graphics2D g2d) {
@@ -98,71 +117,30 @@ public class SubPanelTable extends JPanel {
 	}
 	
 	private boolean collidingTableTopEdge() {
-		return (ballTopEdge() < 0);
+		return (ball.topEdge() < 0);
 	}
 	
 	private boolean collidingTableBottomEdge() {
-		return (ballBottomEdge() > TABLE_HEIGHT);
+		return (ball.bottomEdge() > TABLE_HEIGHT);
 	}
 	
 	private boolean collidingTableLeftEdge() {
-		return (ballLeftEdge() < 0);
+		return (ball.leftEdge() < 0);
 	}
 	
 	private boolean collidingTableRightEdge() {
-		return (ballRightEdge() > TABLE_WIDTH);
+		return (ball.rightEdge() > TABLE_WIDTH);
 	}
 	
 	private boolean collidingPaddle1Edge() {
-		return (ballLeftEdge() < PADDLE_1_EDGE) && (ballTopEdge() < paddle1BottomEdge()) && (ballBottomEdge() > paddle1TopEdge());
+		return (ball.leftEdge()   < paddle1.rightEdge())  &&
+			   (ball.topEdge()    < paddle1.bottomEdge()) &&
+			   (ball.bottomEdge() > paddle1.topEdge());
 	}
 	
 	private boolean collidingPaddle2Edge() {
-		return (ballRightEdge() > PADDLE_2_EDGE) && (ballTopEdge() < paddle2BottomEdge()) && (ballBottomEdge() > paddle2TopEdge());
-	}
-	
-	private int ballTopEdge() {
-		return yBall;
-	}
-	
-	private int ballBottomEdge() {
-		return yBall + BALL_HEIGHT;
-	}
-	
-	private int ballLeftEdge() {
-		return xBall;
-	}
-	
-	private int ballRightEdge() {
-		return xBall + BALL_WIDTH;
-	}
-	
-	private int paddle1TopEdge() {
-		return yPaddle1;
-	}
-	
-	private int paddle1BottomEdge() {
-		return yPaddle1 + PADDLE_HEIGHT;
-	}
-	
-	private int paddle2TopEdge() {
-		return yPaddle2;
-	}
-	
-	private int paddle2BottomEdge() {
-		return yPaddle2 + PADDLE_HEIGHT;
-	}
-	
-	private void initialize() {
-		this.setBounds(TABLE_X, TABLE_Y, TABLE_WIDTH, TABLE_HEIGHT);
-		
-		xBall = (TABLE_WIDTH - BALL_WIDTH) / 2;
-		yBall = (TABLE_HEIGHT - BALL_HEIGHT) / 2;
-		
-		xVelocity = 2;
-		yVelocity = 2;
-		
-		yPaddle1 = (TABLE_HEIGHT - PADDLE_HEIGHT) / 2;
-		yPaddle2 = yPaddle1;
+		return (ball.rightEdge()  > paddle2.leftEdge())   &&
+			   (ball.topEdge()    < paddle2.bottomEdge()) &&
+			   (ball.bottomEdge() > paddle2.topEdge());
 	}
 }

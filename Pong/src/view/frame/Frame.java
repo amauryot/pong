@@ -11,15 +11,17 @@ public class Frame extends JFrame {
 
 	private static final long serialVersionUID = 8296914021670968846L;
 
-	private final int FRAME_WIDTH = 567;
+	private final int FRAME_WIDTH  = 567;
 	private final int FRAME_HEIGHT = 357;
-	private final String FRAME_TITLE = "Pong";
+	
+	private final String FRAME_TITLE  = "Pong";
 	private final String MENU_1_TITLE = "Menu";
 	private final String MENU_2_TITLE = "Ajuda";
 	
-	private ArrayList<JMenuItem> menuItemList;
 	private JMenu menu;
 	private JMenu menuHelp;
+	
+	private ArrayList<JMenuItem> menuItemList;
 	
 	public Frame() {
 		super();
@@ -31,8 +33,7 @@ public class Frame extends JFrame {
 	}
 	
 	private JMenu menu(int index) {
-		if (index < 2) return menu;
-		return menuHelp;
+		return (index < 2) ? menu : menuHelp;
 	}
 	
 	private void initialize() {
