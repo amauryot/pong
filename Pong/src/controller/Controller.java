@@ -35,6 +35,7 @@ public class Controller implements ActionListener, KeyListener {
 		window.game().moveBall();
 		window.game().movePaddle2();
 		window.game().checkCollisions();
+		window.game().checkScore();
 		
 		window.game().update();
 		
