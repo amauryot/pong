@@ -99,13 +99,13 @@ public class SubPanelTable extends JPanel {
 	}
 	
 	public void checkScore() {
-		if (ball.leftEdge() < 0) {
+		if (ball.rightEdge() < 0) {
 			score2++;
 			labelScore2.setText(String.valueOf(score2));
 			restart();
 		}
 		
-		if (ball.rightEdge() > TABLE_WIDTH) {
+		if (ball.leftEdge() > TABLE_WIDTH) {
 			score1++;
 			labelScore1.setText(String.valueOf(score1));
 			restart();
